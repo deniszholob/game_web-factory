@@ -1,1 +1,92 @@
-/* You can add global styles to this file, and also import other style files */
+/* You can add global styles to this file, and also import other style files 
+ * @ref: https://tailwindcss.com/docs/adding-custom-styles
+ */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/** The base layer is for things like reset rules or default styles applied to plain HTML elements. */
+@layer base {
+  /* Override preflight's default sans font choice to be serif (https://tailwindcss.com/docs/preflight) */
+  /* html, :host { @apply font-serif; } */
+
+  html {
+    @apply h-full scroll-smooth bg-white text-neutral-800 dark:bg-neutral-800 dark:text-neutral-300;
+  }
+
+  body {
+    @apply flex h-svh min-h-full flex-col;
+  }
+
+  hr {
+    @apply border-gray-300 dark:border-gray-500;
+  }
+
+  dt {
+    @apply float-left clear-left font-bold after:content-[':'];
+  }
+
+  em {
+    @apply font-bold not-italic;
+  }
+}
+
+/** The components layer is for class-based styles that you want to be able to override with utilities. */
+@layer components {
+  section,
+  .section {
+    @apply flex flex-col py-4;
+  }
+
+  .container-fixed {
+    @apply m-auto flex w-full max-w-screen-2xl flex-col gap-4 px-12;
+  }
+
+  .container-fluid {
+    @apply flex w-full flex-col gap-4 px-12;
+  }
+
+  .link {
+    @apply gap-2 text-blue-600 underline hover:text-blue-700;
+  }
+
+  /*  rounded bg-gray-600 text-white transition duration-300 ease-in-out hover:bg-gray-700 */
+
+  button,
+  .btn {
+    @apply inline-flex cursor-pointer items-center justify-center gap-2 border border-solid border-transparent px-4 py-2;
+    &:disabled {
+      @apply cursor-not-allowed opacity-80;
+    }
+  }
+
+  .btn-icon {
+    @apply p-2;
+  }
+
+  .btn-primary {
+    @apply border-blue-500 bg-blue-600 text-white hover:bg-blue-700 hover:disabled:bg-blue-500;
+  }
+
+  .btn-secondary {
+    @apply border-blue-500 text-blue-500 hover:bg-blue-700 hover:text-white hover:disabled:bg-blue-500;
+  }
+}
+
+/** The utilities layer is for small, single-purpose classes that should always take precedence over any other styles. */
+@layer utilities {
+  .flex-full-no-shrink {
+    flex: 0 1 100%;
+  }
+
+  .scroll-container {
+    overflow-y: auto;
+    overflow-y: overlay;
+    width: 100%;
+    flex: 1;
+  }
+}
+
+.factorio-icon {
+  filter: drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.5));
+}

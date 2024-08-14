@@ -1,0 +1,146 @@
+<div
+  class="flex w-max flex-col gap-2 border border-solid border-neutral-700 bg-stone-200 p-4 dark:bg-stone-800"
+  data-cy="recipe"
+  style="box-shadow: 0 0 5px 5px rgb(0 0 0 / 50%)"
+>
+  <div class="flex flex-col" data-cy="title">
+    <div class="flex flex-row items-center gap-2">
+      <i class="fa-solid fa-clipboard-list text-xl"></i>
+      <span class="text-xl">{{ recipeInfo().display }}</span>
+    </div>
+    <span>
+      <em>{{ recipeInfo().time }}</em
+      >s craft time
+    </span>
+  </div>
+
+  <hr />
+
+  <div class="flex flex-col" data-cy="ingredients">
+    <span class="text-xl">Consumes</span>
+    @for (ingredient of recipeInfo().consumes; track $index) {
+      <div class="flex flex-row items-center gap-2">
+        <app-factorio-icon [icon]="ENTITY_INFO[ingredient.id].icon"></app-factorio-icon>
+        <p>
+          <em> {{ ingredient.count }}</em>
+          <small> x </small>
+          <span>{{ ENTITY_INFO[ingredient.id].display }}</span>
+        </p>
+      </div>
+    }
+  </div>
+
+  <hr />
+
+  <div class="flex flex-col" data-cy="products">
+    <span class="text-xl">Produces</span>
+    @for (ingredient of recipeInfo().produces; track $index) {
+      <div class="flex flex-row items-center gap-2">
+        <app-factorio-icon [icon]="ENTITY_INFO[ingredient.id].icon"></app-factorio-icon>
+        <p>
+          <em> {{ ingredient.count }}</em>
+          <small> x </small>
+          <span>{{ ENTITY_INFO[ingredient.id].display }}</span>
+        </p>
+      </div>
+    }
+  </div>
+
+  <hr />
+
+  <div class="flex flex-col" data-cy="producers">
+    <span class="text-xl">Made In</span>
+    <div class="flex flex-col">
+      @for (producer of producers(); track $index; let index = $index) {
+        <div class="flex flex-row items-center justify-between">
+          <div class="flex flex-row items-center gap-2">
+            <app-factorio-icon [icon]="ENTITY_INFO[producer.id].icon"></app-factorio-icon>
+            <em>{{ producer.isCrafting.length }}</em>
+          </div>
+
+          <div class="min-w-4 flex-1"></div>
+
+          <div class="flex flex-row">
+            <button
+              class="btn-icon text-green-500"
+              (click)="
+                gameService.addToRecipeProducers(
+                  inventoryEntity(),
+                  inventoryRecipe().id,
+                  producer.id,
+                  index
+                )
+              "
+              title="Add Producer from inventory"
+            >
+              <i class="fa-solid fa-plus fa-fw"></i>
+            </button>
+            <button
+              class="btn-icon text-red-500"
+              (click)="
+                gameService.removeFromRecipeProducers(
+                  inventoryEntity(),
+                  inventoryRecipe().id,
+                  producer.id,
+                  index
+                )
+              "
+              title="Remove Producer to inventory"
+            >
+              <i class="fa-solid fa-minus fa-fw"></i>
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- <pre>{{ recipeInfo().producedIn | json }}</pre> -->
+  <!-- <pre>{{ producers() | json }}</pre> -->
+
+  <!-- <hr class="py-2" />
+
+  <button
+    class="relative overflow-hidden btn-primary"
+    (click)="gameService.makeRecipe(recipeInfo())"
+  >
+    <span
+      class="absolute top-0 left-0 h-full bg-white opacity-20"
+      [ngStyle]="{ width: gameService.inventoryRecipe[recipeInfo().id].progress + '%' }"
+    ></span>
+    <span class="relative z-10">{{
+      gameService.inventoryRecipe[recipeInfo().id].progress
+        ? (gameService.inventoryRecipe[recipeInfo().id].progress / 100 | percent)
+        : 'Make Recipe'
+    }}</span>
+  </button> -->
+</div>
+
+<!-- <div
+  class="flex flex-col items-center justify-center m-auto border rounded shadow-md max-w-32 dark:text-white"
+>
+  <app-factorio-icon [icon]="FactorioIcon.Ironore"></app-factorio-icon>
+  <app-factorio-icon [icon]="FactorioIcon.Electricminingdrill"></app-factorio-icon>
+  <app-factorio-icon [icon]="FactorioIcon.Ironaxe"></app-factorio-icon>
+</div>
+
+<div
+  class="flex flex-col items-center justify-center p-2 m-auto border rounded shadow-md dark:text-white"
+>
+  <span class="text-neutral-100">Iron Plate</span>
+  <app-factorio-icon [icon]="FactorioIcon.Ironplate" [size]="IconSizes.lg"></app-factorio-icon>
+  <hr class="border-gray-300 dark:border-gray-500" />
+
+  <div class="flex flex-row gap-2">
+    <div class="flex p-2 shadow-inner bg-neutral-900 shadow-black">
+      <button class="w-16 h-16 hover:text-green-600" title="Craft">
+        <i class="text-6xl fa-solid fa-arrows-to-dot fa-fw"></i>
+      </button>
+    </div>
+
+    <app-factorio-icon
+      [icon]="FactorioIcon.Assemblingmachine2"
+      [size]="IconSizes.lg"
+    ></app-factorio-icon>
+  </div>
+</div> -->

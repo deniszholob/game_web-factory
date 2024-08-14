@@ -1,0 +1,15 @@
+<header class="bg-neutral-100 dark:bg-neutral-900">
+  <div class="container-fixed flex flex-row justify-between p-4">
+    <h1 class="text-2xl">Factory Game <small>(Prototype WIP)</small></h1>
+    <em><small>Known performance issues when lots of stuff is being automatically made</small></em>
+
+    <div class="flex flex-row items-center gap-4">
+      <span>Updated {{ APP_MODIFIED_DATE | date: 'y/M/d' }}</span>
+      <app-theme-toggle></app-theme-toggle>
+    </div>
+  </div>
+  <!-- <nav class="flex flex-row flex-wrap items-center py-4 container-fixed gap-x-4">
+    <a class="text-lg link" routerLink="/">Home</a>
+    <a class="text-lg link" routerLink="/dev">Dev <small> (only on localhost)</small></a>
+  </nav> -->
+</header>

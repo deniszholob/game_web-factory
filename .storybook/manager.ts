@@ -13,7 +13,7 @@
 //   // Colors
 //   colorPrimary: 'ffffff',
 //   colorSecondary: '#ffffff',
-//   brandTitle: 'template-nx-project',
+//   brandTitle: 'game_web-factory',
 //   appBg: '#000000',
 // });
 

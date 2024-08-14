@@ -1,5 +1,5 @@
 {
-  "name": "template-nx-project",
+  "name": "game_web-factory",
   "$schema": "node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "prefix": "app",
@@ -66,10 +66,10 @@
       "executor": "@angular-devkit/build-angular:dev-server",
       "configurations": {
         "production": {
-          "buildTarget": "template-nx-project:build:production"
+          "buildTarget": "game_web-factory:build:production"
         },
         "development": {
-          "buildTarget": "template-nx-project:build:development"
+          "buildTarget": "game_web-factory:build:development"
         }
       },
       "defaultConfiguration": "development"
@@ -77,7 +77,7 @@
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
       "options": {
-        "buildTarget": "template-nx-project:build"
+        "buildTarget": "game_web-factory:build"
       }
     },
     "lint": {
@@ -96,7 +96,7 @@
     "serve-static": {
       "executor": "@nx/web:file-server",
       "options": {
-        "buildTarget": "template-nx-project:build"
+        "buildTarget": "game_web-factory:build"
       }
     },
     "storybook": {
@@ -104,7 +104,7 @@
       "options": {
         "port": 4400,
         "configDir": "./.storybook",
-        "browserTarget": "template-nx-project:build",
+        "browserTarget": "game_web-factory:build",
         "compodoc": false
       },
       "configurations": {
@@ -117,9 +117,9 @@
       "executor": "@storybook/angular:build-storybook",
       "outputs": ["{options.outputDir}"],
       "options": {
-        "outputDir": "dist/storybook/template-nx-project",
+        "outputDir": "dist/storybook/game_web-factory",
         "configDir": "./.storybook",
-        "browserTarget": "template-nx-project:build",
+        "browserTarget": "game_web-factory:build",
         "compodoc": false
       },
       "configurations": {
@@ -131,12 +131,12 @@
     "static-storybook": {
       "executor": "@nx/web:file-server",
       "options": {
-        "buildTarget": "template-nx-project:build-storybook",
-        "staticFilePath": "dist/storybook/template-nx-project"
+        "buildTarget": "game_web-factory:build-storybook",
+        "staticFilePath": "dist/storybook/game_web-factory"
       },
       "configurations": {
         "ci": {
-          "buildTarget": "template-nx-project:build-storybook:ci"
+          "buildTarget": "game_web-factory:build-storybook:ci"
         }
       }
     }

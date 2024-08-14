@@ -1,0 +1,12 @@
+<div
+  class="flex items-center justify-center p-px"
+  [ngClass]="{
+    'h-4 w-4': size() === IconSizes.sm,
+    'h-8 w-8': size() === IconSizes.md,
+    'h-16 w-16': size() === IconSizes.lg,
+    'h-32 w-32': size() === IconSizes.xl
+  }"
+  title="{{ iconData().display }}"
+>
+  <img class="factorio-icon w-full" src="{{ iconData().url }}" alt="{{ iconData().display }}" />
+</div>

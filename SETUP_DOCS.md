@@ -11,8 +11,8 @@ Generate new NX Project
 Install Storybook
 
 - `pnpm install -D @nx/storybook @storybook/types @storybook/theming @storybook/manager-api @babel/runtime`
-- `npx nx g @nx/angular:storybook-configuration template-nx-project --tsConfiguration=true`
-- `npx nx g @nx/angular:stories --project=template-nx-project`
+- `npx nx g @nx/angular:storybook-configuration game_web-factory --tsConfiguration=true`
+- `npx nx g @nx/angular:stories --project=game_web-factory`
 
 Install eslint plugins
 
@@ -26,7 +26,7 @@ Firebase
 
 NG Service Worker
 
-- `ng add @angular/pwa --project template-nx-project`
+- `ng add @angular/pwa --project game_web-factory`
 - `pnpm i @angular/pwa && npx nx g @angular/pwa:ng-add`
 - `pnpm i --save-dev http-server`
 
@@ -36,7 +36,7 @@ NG Service Worker
 ## pnpm
 
 - NX
-  - `npx create-nx-workspace@latest template-nx-project`
+  - `npx create-nx-workspace@latest game_web-factory`
   - https://nx.dev/getting-started/installation
   - https://nx.dev/angular-standalone-tutorial/1-code-generation#angular-standalone-tutorial---part-1:-code-generation
 - Jest: Included in NX

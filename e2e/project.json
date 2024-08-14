@@ -1,5 +1,5 @@
 {
-  "name": "template-nx-project-e2e",
+  "name": "game_web-factory-e2e",
   "$schema": "../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "e2e/src",
   "projectType": "application",
@@ -8,15 +8,15 @@
       "executor": "@nx/cypress:cypress",
       "options": {
         "cypressConfig": "e2e/cypress.config.ts",
-        "devServerTarget": "template-nx-project:serve:development",
+        "devServerTarget": "game_web-factory:serve:development",
         "testingType": "e2e"
       },
       "configurations": {
         "production": {
-          "devServerTarget": "template-nx-project:serve:production"
+          "devServerTarget": "game_web-factory:serve:production"
         },
         "ci": {
-          "devServerTarget": "template-nx-project:serve-static"
+          "devServerTarget": "game_web-factory:serve-static"
         }
       }
     },
@@ -26,5 +26,5 @@
     }
   },
   "tags": [],
-  "implicitDependencies": ["template-nx-project"]
+  "implicitDependencies": ["game_web-factory"]
 }

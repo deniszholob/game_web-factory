@@ -1,6 +1,6 @@
 import { toTitleCase, toWordCase } from './formatter.util';
 
-describe('AppTitleService Functions', () => {
+describe('Formatter Functions', () => {
   it('should convert toTitleCase', () => {
     expect(toTitleCase('abc')).toStrictEqual('Abc');
   });

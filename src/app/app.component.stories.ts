@@ -9,7 +9,7 @@ const meta: Meta<ComponentWithCustomControls> = {
   // decorators: [moduleMetadata({imports: []})],
   parameters: {
     docs: { description: { component: `App` } },
-    // layout: 'fullscreen',
+    layout: 'fullscreen',
   },
   argTypes: {
     // Output

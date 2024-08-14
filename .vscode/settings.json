@@ -87,8 +87,13 @@
      }
    ],
   "workbench.editor.pinnedTabsOnSeparateRow": true,
+  "files.associations": {
+    "*.css": "tailwindcss",
+    "*.scss": "tailwindcss"
+  },
   "files.insertFinalNewline": true,
   "files.trimFinalNewlines": true,
+  // Do not include tailwind.config.js as its necessary for tailwind extension to work
   "files.exclude": {
     "**/.angular": true,
     "**/.babelrc": true,
@@ -102,6 +107,7 @@
     "**/dist/": true,
     "**/e2e": true,
     "**/node_modules": true,
+    "**/screenshots/": true,
     "**/src/app/app.config.ts": true,
     "**/src/app/app.modified.ts": true,
     "**/src/environments": true,

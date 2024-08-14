@@ -31,7 +31,7 @@ describe('AppTitleService', () => {
       root: { queryParams: {} },
     } as unknown as RouterStateSnapshot;
     service.updateTitle(snapshot);
-    expect(title.getTitle()).toStrictEqual('template_nx_project_name - Page');
+    expect(title.getTitle()).toStrictEqual('Factory Game - Page');
   });
 
   it('should updateTitle with deep url', () => {
@@ -40,7 +40,7 @@ describe('AppTitleService', () => {
       root: { queryParams: {} },
     } as unknown as RouterStateSnapshot;
     service.updateTitle(snapshot);
-    expect(title.getTitle()).toStrictEqual('template_nx_project_name - Space');
+    expect(title.getTitle()).toStrictEqual('Factory Game - Space');
   });
 
   it('should updateTitle with url and query params', () => {
@@ -49,8 +49,6 @@ describe('AppTitleService', () => {
       root: { queryParams: { q: 'bob' } },
     } as unknown as RouterStateSnapshot;
     service.updateTitle(snapshot);
-    expect(title.getTitle()).toStrictEqual(
-      'template_nx_project_name - Search: "bob"'
-    );
+    expect(title.getTitle()).toStrictEqual('Factory Game - Search: "bob"');
   });
 });

@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-  displayName: 'template-nx-project',
+  displayName: 'game_web-factory',
   preset: './jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   coverageDirectory: './coverage',

@@ -1,0 +1,12 @@
+<button class="btn-primary btn-icon rounded" (click)="themeToggleService.toggleTheme()">
+  @if (!themeToggleService.isDarkMode) {
+    <div class="inline-flex">
+      <i class="fa-solid fa-sun fa-fw"></i>
+    </div>
+  } @else {
+    <div class="inline-flex">
+      <i class="fa-solid fa-moon fa-fw"></i>
+    </div>
+  }
+  <span class="sr-only">Toggle Theme</span>
+</button>
