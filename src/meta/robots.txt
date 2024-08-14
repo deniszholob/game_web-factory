@@ -1,0 +1,3 @@
+User-Agent: *
+Disallow: /assets/*
+Sitemap: https://deniszholob.github.io/template-nx-project/sitemap.xml

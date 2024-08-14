@@ -1,0 +1,3 @@
+# Layout "library"
+
+Used for page/app layout templates, nav, footer, any other structure type components, etc...
