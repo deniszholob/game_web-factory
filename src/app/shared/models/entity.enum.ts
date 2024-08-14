@@ -3,25 +3,25 @@ import { FactorioIcon } from './factorio-icon.enum';
 import { FactorioWikiIcon } from './factorio-wiki-icon.enum';
 
 export enum Entity {
+  'DepositStone' = 'DepositStone',
   'DepositIron' = 'DepositIron',
   'DepositCopper' = 'DepositCopper',
-  'DepositStone' = 'DepositStone',
   'DepositCoal' = 'DepositCoal',
   // 'DepositWater' = 'DepositWater',
   // 'DepositWood' = 'DepositWood',
   // 'DepositUranium' = 'DepositUranium',
   // =========================================
+  'RawStone' = 'RawStone',
   'RawIron' = 'RawIron',
   'RawCopper' = 'RawCopper',
-  'RawStone' = 'RawStone',
   'RawCoal' = 'RawCoal',
   // 'RawWater' = 'RawWater',
   // 'RawWood' = 'RawWood',
   // 'RawUranium' = 'RawUranium',
   // =========================================
+  'StoneBrick' = 'StoneBrick',
   'IronPlate' = 'IronPlate',
   'CopperPlate' = 'CopperPlate',
-  'StoneBrick' = 'StoneBrick',
   'SteelPlate' = 'SteelPlate',
   // =========================================
   'IronGear' = 'IronGear',

@@ -1,9 +1,9 @@
 export enum EntityType {
   'RawResource' = 'RawResource',
-  'RawMaterial' = 'RawMaterial',
-  'IntermediateProduct' = 'IntermediateProduct',
   'ExtractionMachine' = 'ExtractionMachine',
+  'RawMaterial' = 'RawMaterial',
   'SmeltingMachine' = 'SmeltingMachine',
+  'IntermediateProduct' = 'IntermediateProduct',
   'ProductionMachine' = 'ProductionMachine',
 
   // 'Factory' = 'Factory',
@@ -32,15 +32,15 @@ export const ENTITY_TYPE_INFO: Record<EntityType, EntityTypeInfo> = {
   },
   [EntityType.ExtractionMachine]: {
     id: EntityType.ExtractionMachine,
-    display: 'Extraction Machine',
+    display: 'Extraction Factory',
   },
   [EntityType.SmeltingMachine]: {
     id: EntityType.SmeltingMachine,
-    display: 'Smelting Machine',
+    display: 'Smelting Factory',
   },
   [EntityType.ProductionMachine]: {
     id: EntityType.ProductionMachine,
-    display: 'Production Machine',
+    display: 'Production Factory',
   },
   // [EntityType.Factory]: {
   //   id: EntityType.Factory,

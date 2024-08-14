@@ -1,14 +1,27 @@
 <section>
-  <div class="container mx-auto flex flex-row justify-center gap-8">
-    <div class="flex flex-row gap-2" data-cy="inventory">
+  <div class="container-fixed container mx-auto flex flex-row gap-8">
+    <div class="flex flex-col gap-2 pb-[210px] pr-[210px]" data-cy="inventory">
+      <p>
+        Produce items to make factories to make more items.
+        <br />Some items can only be made in factories (e.g. Iron Plate can only be smelted in a
+        stone furnace)
+      </p>
+
       @for (type of ENTITY_TYPE_OPTIONS; track $index) {
-        <div class="flex flex-col gap-2">
-          <span class="flex flex-col items-center">{{ ENTITY_TYPE_INFO[type].display }}</span>
+        <h2 class="flex flex-col items-center text-lg font-bold">
+          {{ ENTITY_TYPE_INFO[type].display }}
+        </h2>
+
+        <div class="flex flex-row flex-wrap gap-2" data-cy="entity-group">
           @for (entity of groupedEntities[type]; track $index) {
             <div
               class="group relative flex min-h-64 w-44 flex-col items-center gap-2 border border-solid border-neutral-500 bg-stone-200 dark:bg-stone-800"
+              data-cy="entity-card"
             >
-              <div class="absolute left-full top-0 z-10 hidden group-hover:flex">
+              <div
+                class="absolute left-full top-0 z-10 hidden group-hover:flex"
+                data-cy="hover-recipe-card"
+              >
                 @for (recipe of inventoryEntity[entity].recipes | keyvalue; track $index) {
                   <app-recipe-card
                     [inventoryEntity]="entity"
@@ -144,11 +157,17 @@
                         }}</span>
                       </button>
                     } @else {
-                      <div class="h-10 w-full bg-neutral-900 py-0.5"></div>
+                      <div
+                        class="flex h-10 w-full items-center justify-center bg-neutral-900 py-0.5"
+                      >
+                        Factory Craft Only
+                      </div>
                     }
                   </div>
                 } @else {
-                  <div class="h-10 w-full bg-neutral-900 py-0.5"></div>
+                  <div class="flex h-10 w-full items-center justify-center bg-neutral-900 py-0.5">
+                    Cannot Craft This
+                  </div>
                 }
               </div>
             </div>

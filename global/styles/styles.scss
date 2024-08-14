@@ -18,6 +18,14 @@
     @apply flex h-svh min-h-full flex-col;
   }
 
+  h1 {
+    @apply text-2xl;
+  }
+
+  h2 {
+    @apply py-4 text-4xl;
+  }
+
   hr {
     @apply border-gray-300 dark:border-gray-500;
   }
