@@ -1,0 +1,3 @@
+User-Agent: *
+Disallow: /assets/*
+Sitemap: https://deniszholob.github.io/game_web-factory/sitemap.xml

@@ -1,0 +1,2 @@
+import{Cb as p,Ja as s,Ka as a,La as r,Qa as o,Ta as c,W as i}from"./chunk-QOX5ZRYL.js";var u=(()=>{let e=class e{};e.\u0275fac=function(n){return new(n||e)},e.\u0275cmp=i({type:e,selectors:[["app-dev-page"]],standalone:!0,features:[c],decls:4,vars:0,consts:[[1,"container-fixed"]],template:function(n,m){n&1&&(s(0,"section",0),o(1," Space for testing out code. "),r(2,"br"),o(3,`Do not save changes to repo
+`),a())},dependencies:[p],styles:["[_nghost-%COMP%]{display:contents}"]});let t=e;return t})();export{u as DevPageComponent};
