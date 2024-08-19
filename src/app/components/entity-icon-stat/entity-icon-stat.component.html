@@ -1,0 +1,9 @@
+<div class="flex flex-row items-center gap-2">
+  <div class="pl-1 text-neutral-500">
+    <i class="text-lg {{ entityIconStat().icon }}"></i>
+  </div>
+  <span>
+    <em>{{ entityIconStat().count | appNumberFormatSuffix }}{{ entityIconStat().unit }}</em>
+    <span class="text-neutral-500"> {{ entityIconStat().display }}</span>
+  </span>
+</div>

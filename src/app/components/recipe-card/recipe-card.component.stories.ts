@@ -14,12 +14,8 @@ export default {
     // layout: 'fullscreen',
   },
   argTypes: {
-    // /** === Input Mapping === */
-    inventoryRecipe: {
-      options: [...Object.values(Recipe)],
-      // mapping: Recipe,
-      control: { type: 'select' },
-    },
+    /** === Input Mapping === */
+    // input: { options: ['---', ...Object.values(YourEnum)], mapping: YourEnum & { '---': undefined }, control: { type: 'select' }}
     /** === Output Actions === */
     // inputChange: { action: 'inputChange', table: { disable: true } }
     /** === Control Hide === */
@@ -28,15 +24,16 @@ export default {
     // someControl: { control: { disable: true } }
   },
   args: {
-    inventoryRecipe: {
-      id: Recipe.Assembler1,
-      machines: [
-        {
-          id: Entity.Assembler1,
-          isCrafting: [true, false],
-        },
-      ],
+    recipe: {
+      id: Recipe.ElectronicCircuit,
+      display: 'Recipe Display',
+      producedIn: new Set([Entity.Assembler1, Entity.Assembler2]),
+      produces: [{ id: Entity.StoneBrick, count: 1 }],
+      consumes: [{ id: Entity.DepositStone, count: 1 }],
+      machineRequired: true,
+      time: 1,
     },
+    shownRecipeIdx: 0,
   },
 } satisfies Meta<ComponentWithCustomControls>;
 

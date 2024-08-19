@@ -11,7 +11,7 @@
   /* html, :host { @apply font-serif; } */
 
   html {
-    @apply h-full scroll-smooth bg-white text-neutral-800 dark:bg-neutral-800 dark:text-neutral-300;
+    @apply h-full scroll-smooth bg-white text-neutral-700 dark:bg-neutral-700 dark:text-neutral-300;
   }
 
   body {
@@ -79,6 +79,30 @@
   .btn-secondary {
     @apply border-blue-500 text-blue-500 hover:bg-blue-700 hover:text-white hover:disabled:bg-blue-500;
   }
+
+  .btn-card {
+    @apply text-ellipsis border border-solid border-neutral-300 bg-neutral-100 hover:bg-neutral-200 dark:border-neutral-500 dark:bg-neutral-800 dark:hover:bg-neutral-900;
+    &.selected {
+      @apply border-neutral-400 dark:border-neutral-200;
+    }
+
+    &-border {
+      @apply rounded-t-lg border-b-4 border-b-neutral-100 dark:border-b-neutral-800;
+      &.selected {
+        @apply border-b-blue-500;
+      }
+    }
+  }
+
+  .badge {
+    @apply absolute -right-1 -top-1 inline-flex min-h-2 min-w-2 items-center justify-center rounded-full bg-lime-500 px-1 text-xs font-medium leading-4 text-white;
+    @apply right-1 top-1;
+
+    &-text {
+      @apply -right-2 -top-2;
+      @apply -right-1 -top-1;
+    }
+  }
 }
 
 /** The utilities layer is for small, single-purpose classes that should always take precedence over any other styles. */
@@ -95,6 +119,16 @@
   }
 }
 
-.factorio-icon {
-  filter: drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.5));
+.drop-shadow-text {
+  filter: drop-shadow(0px 1px 1px rgba(0, 0, 0, 1));
+}
+
+.drop-shadow-icon {
+  filter: drop-shadow(0px 2px 1px rgba(0, 0, 0, 0.8));
+}
+
+.dark {
+  .drop-shadow-icon {
+    filter: drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.5));
+  }
 }

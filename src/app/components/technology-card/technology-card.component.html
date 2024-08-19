@@ -1,0 +1,67 @@
+<div
+  class="flex w-full flex-col rounded border border-solid border-neutral-700 bg-stone-200 min-[384px]:w-max dark:bg-stone-800"
+  [ngClass]="{ 'opacity-50': techState() !== TechState.Available }"
+  data-cy="tech-card"
+  style="box-shadow: 0 0 5px 5px rgb(0 0 0 / 50%)"
+>
+  @switch (techState()) {
+    @case (TechState.Researched) {
+      <div class="flex items-center justify-center w-full py-1 bg-green-600 text-neutral-800">
+        {{ TECH_STATE_INFO[TechState.Researched].display }}
+      </div>
+    }
+    @case (TechState.Available) {
+      <button
+        class="relative py-1 overflow-hidden btn btn-primary"
+        [disabled]="gameService.gameState.techInfo[techInfo().id].researchProgress"
+        (click)="gameService.researchTech(techInfo().id)"
+      >
+        <span
+          class="absolute top-0 left-0 h-full bg-white opacity-20"
+          [ngStyle]="{
+            width: gameService.gameState.techInfo[techInfo().id].researchProgress + '%'
+          }"
+        ></span>
+
+        <span class="relative z-10">{{
+          gameService.gameState.techInfo[techInfo().id].researchProgress
+            ? (gameService.gameState.techInfo[techInfo().id].researchProgress / 100 | percent)
+            : 'Research'
+        }}</span>
+      </button>
+    }
+    @case (TechState.Locked) {
+      <div
+        class="flex items-center justify-center w-full py-1 bg-neutral-500 text-neutral-800 dark:bg-neutral-600 dark:text-neutral-300"
+      >
+        {{ TECH_STATE_INFO[TechState.Locked].display }}
+      </div>
+    }
+  }
+
+  <div class="flex flex-col gap-2 p-4 pt-1">
+    <div class="flex flex-row items-center gap-2">
+      <div class="relative drop-shadow-icon">
+        <app-factorio-icon [icon]="techInfo().icon" [size]="IconSizes.lg"></app-factorio-icon>
+        <i class="absolute text-3xl fa-solid fa-flask bottom-1 right-1"></i>
+      </div>
+      <h3 class="text-lg font-bold">{{ techInfo().display }}</h3>
+    </div>
+
+    <div class="flex flex-row items-center gap-2">
+      <div class="pl-1">
+        <i class="text-lg fa-regular fa-clock"></i>
+      </div>
+      <span>
+        <em>{{ techInfo().time }}</em
+        >s craft time
+      </span>
+    </div>
+
+    @for (section of cardInfo(); track $index) {
+      <hr />
+      <app-entity-count-list [entityCountList]="section"></app-entity-count-list>
+    }
+  </div>
+</div>
+<!-- <pre>{{ techInfo() | json }}</pre> -->

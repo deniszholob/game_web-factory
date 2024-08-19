@@ -1,0 +1,9 @@
+<div class="flex flex-col">
+  <h4 class="text-sm font-semibold">{{ entityCountList().title }}</h4>
+  @for (entityCount of entityCountList().entityCounts; track $index) {
+    <app-entity-count [iconCount]="entityCount"></app-entity-count>
+  }
+  @if (entityCountList().entityCounts.length === 0) {
+    <p class="text-sm text-gray-500">Nothing.</p>
+  }
+</div>

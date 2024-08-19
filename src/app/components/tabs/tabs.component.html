@@ -1,0 +1,29 @@
+<div
+  class="flex flex-row flex-wrap items-center border-b border-solid border-neutral-500"
+  data-cy="tab-group"
+>
+  @for (tab of tabs; track tab.id) {
+    <button
+      class="btn-card btn-card-border relative {{ class() }}"
+      [ngClass]="{ selected: selectedTabs.includes(tab.id) }"
+      [attr.data-cy]="(tabsId ? tabsId + '-' : '') + 'tab-' + tab.id"
+      [title]="tab.display"
+      (click)="onTabClick(tab)"
+    >
+      @if (tab.custom) {
+        <!-- <ng-container *ngTemplateOutlet="tabCustomContent"></ng-container> -->
+        <ng-container
+          *ngTemplateOutlet="tab.custom.template; context: { $implicit: tab.custom.context }"
+        ></ng-container>
+      } @else {
+        {{ tab.display }}
+      }
+
+      @if (tab.badge !== undefined) {
+        <span class="badge z-10" [ngClass]="{ 'badge-text': tab.badge !== null }">{{
+          tab.badge
+        }}</span>
+      }
+    </button>
+  }
+</div>

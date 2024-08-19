@@ -1,0 +1,5 @@
+<div class="flex flex-row flex-wrap justify-center gap-4">
+  @for (tech of sortedTech; track $index) {
+    <app-technology-card [techInfo]="tech"></app-technology-card>
+  }
+</div>

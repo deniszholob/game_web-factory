@@ -1,4 +1,4 @@
-import { Entity } from './entity.enum';
+import { Entity, ENTITY_INFO } from './entity.enum';
 
 export enum Recipe {
   'ResourceScan' = 'ResourceScan',
@@ -26,8 +26,10 @@ export enum Recipe {
   'Assembler2' = 'Assembler2',
   // =========================================
   'Radar' = 'Radar',
-  'Electricity' = 'Electricity', //TODO: Temporary, electicity is should not be an entity
+  'SteamPower' = 'SteamPower',
+  'SolarPower' = 'SolarPower', //TODO: Temporary, electicity is should not be an entity
   'SolarPanel' = 'SolarPanel',
+  'SteamEngine' = 'SteamEngine',
 }
 
 export const RECIPE_OPTIONS: Recipe[] = Object.values(Recipe);
@@ -45,8 +47,13 @@ export interface RecipeInfo {
   /** seconds */
   time: number;
   // technologyRequired?:Technology;
+  /** Order from highest to lowest tier */
   producedIn: Set<Entity>;
   machineRequired?: boolean;
+}
+
+export function isComplexRecipe(recipe: Recipe): boolean {
+  return RECIPE_INFO[recipe].produces.length > 1;
 }
 
 export const RECIPE_INFO: Record<Recipe, RecipeInfo> = {
@@ -61,7 +68,7 @@ export const RECIPE_INFO: Record<Recipe, RecipeInfo> = {
       { id: Entity.DepositStone, count: 1 },
     ],
     time: 30,
-    producedIn: new Set([Entity.Radar]), // TODO: Exploration?
+    producedIn: new Set([Entity.Radar].sort(machineTierSort)), // TODO: Exploration?
     machineRequired: true,
   },
   // =========================================
@@ -70,32 +77,40 @@ export const RECIPE_INFO: Record<Recipe, RecipeInfo> = {
     display: 'Extracted Coal',
     consumes: [{ id: Entity.DepositCoal, count: 1 }],
     produces: [{ id: Entity.RawCoal, count: 1 }],
-    time: 0.5,
-    producedIn: new Set([Entity.DrillBurner, Entity.DrillElectric]),
+    time: 1,
+    producedIn: new Set(
+      [Entity.DrillBurner, Entity.DrillElectric].sort(machineTierSort),
+    ),
   },
   [Recipe.ExtractedCopper]: {
     id: Recipe.ExtractedCopper,
     display: 'Extracted Copper',
     consumes: [{ id: Entity.DepositCopper, count: 1 }],
     produces: [{ id: Entity.RawCopper, count: 1 }],
-    time: 0.5,
-    producedIn: new Set([Entity.DrillBurner, Entity.DrillElectric]),
+    time: 1,
+    producedIn: new Set(
+      [Entity.DrillBurner, Entity.DrillElectric].sort(machineTierSort),
+    ),
   },
   [Recipe.ExtractedIron]: {
     id: Recipe.ExtractedIron,
     display: 'Extracted Iron',
     consumes: [{ id: Entity.DepositIron, count: 1 }],
     produces: [{ id: Entity.RawIron, count: 1 }],
-    time: 0.5,
-    producedIn: new Set([Entity.DrillBurner, Entity.DrillElectric]),
+    time: 1,
+    producedIn: new Set(
+      [Entity.DrillBurner, Entity.DrillElectric].sort(machineTierSort),
+    ),
   },
   [Recipe.ExtractedStone]: {
     id: Recipe.ExtractedStone,
     display: 'Extracted Stone',
     consumes: [{ id: Entity.DepositStone, count: 1 }],
     produces: [{ id: Entity.RawStone, count: 1 }],
-    time: 0.5,
-    producedIn: new Set([Entity.DrillBurner, Entity.DrillElectric]),
+    time: 1,
+    producedIn: new Set(
+      [Entity.DrillBurner, Entity.DrillElectric].sort(machineTierSort),
+    ),
   },
   // =========================================
   [Recipe.CopperPlate]: {
@@ -104,7 +119,9 @@ export const RECIPE_INFO: Record<Recipe, RecipeInfo> = {
     consumes: [{ id: Entity.RawCopper, count: 1 }],
     produces: [{ id: Entity.CopperPlate, count: 1 }],
     time: 3.2,
-    producedIn: new Set([Entity.FurnaceStone, Entity.FurnaceSteel]),
+    producedIn: new Set(
+      [Entity.FurnaceStone, Entity.FurnaceSteel].sort(machineTierSort),
+    ),
     machineRequired: true,
   },
   [Recipe.IronPlate]: {
@@ -113,7 +130,9 @@ export const RECIPE_INFO: Record<Recipe, RecipeInfo> = {
     consumes: [{ id: Entity.RawIron, count: 1 }],
     produces: [{ id: Entity.IronPlate, count: 1 }],
     time: 3.2,
-    producedIn: new Set([Entity.FurnaceStone, Entity.FurnaceSteel]),
+    producedIn: new Set(
+      [Entity.FurnaceStone, Entity.FurnaceSteel].sort(machineTierSort),
+    ),
     machineRequired: true,
   },
   [Recipe.RecycledIronPlate]: {
@@ -122,7 +141,9 @@ export const RECIPE_INFO: Record<Recipe, RecipeInfo> = {
     consumes: [{ id: Entity.IronGear, count: 1 }],
     produces: [{ id: Entity.IronPlate, count: 1 }],
     time: 3.2,
-    producedIn: new Set([Entity.Assembler1, Entity.Assembler2]),
+    producedIn: new Set(
+      [Entity.Assembler1, Entity.Assembler2].sort(machineTierSort),
+    ),
     machineRequired: true,
   },
   [Recipe.StoneBrick]: {
@@ -131,7 +152,9 @@ export const RECIPE_INFO: Record<Recipe, RecipeInfo> = {
     consumes: [{ id: Entity.RawStone, count: 2 }],
     produces: [{ id: Entity.StoneBrick, count: 1 }],
     time: 3.2,
-    producedIn: new Set([Entity.FurnaceStone, Entity.FurnaceSteel]),
+    producedIn: new Set(
+      [Entity.FurnaceStone, Entity.FurnaceSteel].sort(machineTierSort),
+    ),
     machineRequired: true,
   },
   [Recipe.SteelPlate]: {
@@ -140,7 +163,9 @@ export const RECIPE_INFO: Record<Recipe, RecipeInfo> = {
     consumes: [{ id: Entity.IronPlate, count: 5 }],
     produces: [{ id: Entity.SteelPlate, count: 1 }],
     time: 16,
-    producedIn: new Set([Entity.FurnaceStone, Entity.FurnaceSteel]),
+    producedIn: new Set(
+      [Entity.FurnaceStone, Entity.FurnaceSteel].sort(machineTierSort),
+    ),
     machineRequired: true,
   },
   // =========================================
@@ -150,7 +175,9 @@ export const RECIPE_INFO: Record<Recipe, RecipeInfo> = {
     consumes: [{ id: Entity.IronPlate, count: 2 }],
     produces: [{ id: Entity.IronGear, count: 1 }],
     time: 0.5,
-    producedIn: new Set([Entity.Assembler1, Entity.Assembler2]),
+    producedIn: new Set(
+      [Entity.Assembler1, Entity.Assembler2].sort(machineTierSort),
+    ),
   },
   [Recipe.CopperWire]: {
     id: Recipe.CopperWire,
@@ -158,7 +185,9 @@ export const RECIPE_INFO: Record<Recipe, RecipeInfo> = {
     consumes: [{ id: Entity.CopperPlate, count: 1 }],
     produces: [{ id: Entity.CopperWire, count: 2 }],
     time: 0.5,
-    producedIn: new Set([Entity.Assembler1, Entity.Assembler2]),
+    producedIn: new Set(
+      [Entity.Assembler1, Entity.Assembler2].sort(machineTierSort),
+    ),
   },
   [Recipe.ElectronicCircuit]: {
     id: Recipe.ElectronicCircuit,
@@ -169,7 +198,9 @@ export const RECIPE_INFO: Record<Recipe, RecipeInfo> = {
     ],
     produces: [{ id: Entity.ElectronicCircuit, count: 1 }],
     time: 0.5,
-    producedIn: new Set([Entity.Assembler1, Entity.Assembler2]),
+    producedIn: new Set(
+      [Entity.Assembler1, Entity.Assembler2].sort(machineTierSort),
+    ),
   },
   // =========================================
   [Recipe.FurnaceStone]: {
@@ -178,7 +209,9 @@ export const RECIPE_INFO: Record<Recipe, RecipeInfo> = {
     consumes: [{ id: Entity.RawStone, count: 5 }],
     produces: [{ id: Entity.FurnaceStone, count: 1 }],
     time: 0.5,
-    producedIn: new Set([Entity.Assembler1, Entity.Assembler2]),
+    producedIn: new Set(
+      [Entity.Assembler1, Entity.Assembler2].sort(machineTierSort),
+    ),
   },
   [Recipe.FurnaceSteel]: {
     id: Recipe.FurnaceSteel,
@@ -189,7 +222,9 @@ export const RECIPE_INFO: Record<Recipe, RecipeInfo> = {
     ],
     produces: [{ id: Entity.FurnaceSteel, count: 1 }],
     time: 3,
-    producedIn: new Set([Entity.Assembler1, Entity.Assembler2]),
+    producedIn: new Set(
+      [Entity.Assembler1, Entity.Assembler2].sort(machineTierSort),
+    ),
   },
   [Recipe.DrillBurner]: {
     id: Recipe.DrillBurner,
@@ -200,8 +235,10 @@ export const RECIPE_INFO: Record<Recipe, RecipeInfo> = {
       { id: Entity.FurnaceStone, count: 1 },
     ],
     produces: [{ id: Entity.DrillBurner, count: 1 }],
-    time: 0.5,
-    producedIn: new Set([Entity.Assembler1, Entity.Assembler2]),
+    time: 2,
+    producedIn: new Set(
+      [Entity.Assembler1, Entity.Assembler2].sort(machineTierSort),
+    ),
   },
   [Recipe.DrillElectric]: {
     id: Recipe.DrillElectric,
@@ -213,7 +250,9 @@ export const RECIPE_INFO: Record<Recipe, RecipeInfo> = {
     ],
     produces: [{ id: Entity.DrillElectric, count: 1 }],
     time: 2,
-    producedIn: new Set([Entity.Assembler1, Entity.Assembler2]),
+    producedIn: new Set(
+      [Entity.Assembler1, Entity.Assembler2].sort(machineTierSort),
+    ),
   },
   [Recipe.Assembler1]: {
     id: Recipe.Assembler1,
@@ -225,7 +264,9 @@ export const RECIPE_INFO: Record<Recipe, RecipeInfo> = {
     ],
     produces: [{ id: Entity.Assembler1, count: 1 }],
     time: 0.5,
-    producedIn: new Set([Entity.Assembler1, Entity.Assembler2]),
+    producedIn: new Set(
+      [Entity.Assembler1, Entity.Assembler2].sort(machineTierSort),
+    ),
   },
   [Recipe.Assembler2]: {
     id: Recipe.Assembler2,
@@ -238,7 +279,9 @@ export const RECIPE_INFO: Record<Recipe, RecipeInfo> = {
     ],
     produces: [{ id: Entity.Assembler2, count: 1 }],
     time: 0.5,
-    producedIn: new Set([Entity.Assembler1, Entity.Assembler2]),
+    producedIn: new Set(
+      [Entity.Assembler1, Entity.Assembler2].sort(machineTierSort),
+    ),
   },
   // =========================================
   [Recipe.Radar]: {
@@ -250,16 +293,43 @@ export const RECIPE_INFO: Record<Recipe, RecipeInfo> = {
       { id: Entity.IronPlate, count: 10 },
     ],
     produces: [{ id: Entity.Radar, count: 1 }],
-    time: 0.5,
-    producedIn: new Set([Entity.Assembler1, Entity.Assembler2]),
+    time: 33,
+    producedIn: new Set(
+      [Entity.Assembler1, Entity.Assembler2].sort(machineTierSort),
+    ),
   },
-  [Recipe.Electricity]: {
-    id: Recipe.Electricity,
-    display: 'Electricity',
-    consumes: [],
-    produces: [{ id: Entity.Electricity, count: 60 }],
+  [Recipe.SteamEngine]: {
+    id: Recipe.SteamEngine,
+    display: 'Steam Engine',
+    consumes: [
+      { id: Entity.IronPlate, count: 10 },
+      { id: Entity.IronGear, count: 8 },
+      // { id: Entity.Pipe, count: 5 },
+    ],
+    produces: [{ id: Entity.SteamEngine, count: 1 }],
+    time: 0.5,
+    producedIn: new Set(
+      [Entity.Assembler1, Entity.Assembler2].sort(machineTierSort),
+    ),
+  },
+  [Recipe.SteamPower]: {
+    id: Recipe.SteamPower,
+    display: 'Steam Power',
+    consumes: [
+      // {id: Entity.RawCoal, count: 60000}
+    ],
+    produces: [{ id: Entity.Electricity, count: 900000 }],
     time: 60,
-    producedIn: new Set([Entity.SolarPanel]),
+    producedIn: new Set([Entity.SteamEngine].sort(machineTierSort)),
+    machineRequired: true,
+  },
+  [Recipe.SolarPower]: {
+    id: Recipe.SolarPower,
+    display: 'Solar Power',
+    consumes: [],
+    produces: [{ id: Entity.Electricity, count: 60000 }],
+    time: 60,
+    producedIn: new Set([Entity.SolarPanel].sort(machineTierSort)),
     machineRequired: true,
   },
   [Recipe.SolarPanel]: {
@@ -272,10 +342,19 @@ export const RECIPE_INFO: Record<Recipe, RecipeInfo> = {
     ],
     produces: [{ id: Entity.SolarPanel, count: 1 }],
     time: 10,
-    producedIn: new Set([Entity.Assembler1, Entity.Assembler2]),
+    producedIn: new Set(
+      [Entity.Assembler1, Entity.Assembler2].sort(machineTierSort),
+    ),
   },
 } as const;
 
 export const RECIPE_INFO_OPTIONS: RecipeInfo[] = RECIPE_OPTIONS.map(
   (o: Recipe): RecipeInfo => RECIPE_INFO[o],
 );
+
+function machineTierSort(a: Entity, b: Entity): number {
+  return (
+    (ENTITY_INFO[b].factoryData?.craftSpeed ?? 0) -
+    (ENTITY_INFO[a].factoryData?.craftSpeed ?? 0)
+  );
+}

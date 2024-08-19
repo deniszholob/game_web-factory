@@ -1,146 +1,175 @@
 <div
-  class="flex w-max flex-col gap-2 border border-solid border-neutral-700 bg-stone-200 p-4 dark:bg-stone-800"
-  data-cy="recipe"
+  class="flex flex-col w-full border border-solid rounded border-neutral-700 bg-stone-200 dark:bg-stone-800"
+  data-cy="recipe-card"
   style="box-shadow: 0 0 5px 5px rgb(0 0 0 / 50%)"
 >
-  <div class="flex flex-col" data-cy="title">
+  <div class="flex flex-row">
+    @if (recipe().machineRequired) {
+      <div
+        class="flex items-center justify-center flex-grow px-4 py-1 rounded-tl bg-neutral-500 text-neutral-800 dark:bg-neutral-600 dark:text-neutral-300"
+        title="Can only make this recipe in a factory, cant manual craft"
+      >
+        Factory Only
+      </div>
+    } @else {
+      <button
+        class="relative flex-grow py-1 overflow-hidden rounded-tl btn btn-primary"
+        [disabled]="gameService.gameState.recipeProduction[recipe().id].manualCraftingProgress"
+        (click)="gameService.makeRecipeManually(recipe().id)"
+      >
+        <span
+          class="absolute top-0 left-0 h-full bg-white opacity-20"
+          [ngStyle]="{
+            width: gameService.gameState.recipeProduction[recipe().id].manualCraftingProgress
+              ? gameService.gameState.recipeProduction[recipe().id].manualCraftingProgress + '%'
+              : 0
+          }"
+        ></span>
+
+        <span class="relative z-10">{{
+          gameService.gameState.recipeProduction[recipe().id].manualCraftingProgress
+            ? (gameService.gameState.recipeProduction[recipe().id].manualCraftingProgress
+              | appClampPercent
+              | percent)
+            : 'Manual Craft'
+        }}</span>
+      </button>
+    }
+    @if (existUnlockedMachines()) {
+      <button
+        class="flex-1 gap-0 py-0 pr-0 bg-gray-300 border-gray-300 rounded-tr dark:border-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600"
+        (click)="gameService.toggleAutoCrafting(recipe().id)"
+        title="Toggle Automated Crafting"
+      >
+        <span class="mr-2">Auto</span>
+        <span
+          class="w-10 p-1"
+          [ngClass]="{
+            'bg-gray-400 dark:bg-gray-500':
+              !gameService.gameState.recipeProduction[recipe().id].autoCraftingEnabled
+          }"
+          >OFF</span
+        >
+        <span
+          class="w-10 p-1"
+          [ngClass]="{
+            'bg-blue-600 text-white':
+              gameService.gameState.recipeProduction[recipe().id].autoCraftingEnabled
+          }"
+          >ON</span
+        >
+
+        <!-- Check if there are machines -->
+        <!-- @if (gameService.gameState.recipeProduction[recipe().id].autoCraftingEnabled) {
+        <div class="contents">
+          <i class="text-green-700 fa-solid fa-gear fa-spin" title="Crafting Automatically"></i>
+        </div>
+      } @else {
+        <div class="contents">
+          <i class="text-yellow-500 fa-solid fa-circle-pause fa-fw fa-fade" title="Paused"></i>
+        </div>
+      } -->
+      </button>
+    }
+  </div>
+
+  <div class="flex flex-col gap-2 p-4 pt-1">
     <div class="flex flex-row items-center gap-2">
-      <i class="fa-solid fa-clipboard-list text-xl"></i>
-      <span class="text-xl">{{ recipeInfo().display }}</span>
+      <div class="relative p-2">
+        <i class="text-3xl fa-solid fa-clipboard-list"></i>
+        @if (shownRecipeIdx() != null) {
+          <span class="left-0 right-auto bg-blue-500 badge top-1">{{
+            (shownRecipeIdx() ?? 0) + 1
+          }}</span>
+        }
+      </div>
+      <h3 class="text-lg font-bold">{{ recipe().display }}</h3>
     </div>
-    <span>
-      <em>{{ recipeInfo().time }}</em
-      >s craft time
-    </span>
-  </div>
 
-  <hr />
-
-  <div class="flex flex-col" data-cy="ingredients">
-    <span class="text-xl">Consumes</span>
-    @for (ingredient of recipeInfo().consumes; track $index) {
-      <div class="flex flex-row items-center gap-2">
-        <app-factorio-icon [icon]="ENTITY_INFO[ingredient.id].icon"></app-factorio-icon>
-        <p>
-          <em> {{ ingredient.count }}</em>
-          <small> x </small>
-          <span>{{ ENTITY_INFO[ingredient.id].display }}</span>
-        </p>
+    <div class="flex flex-row items-center gap-2">
+      <div class="pl-1">
+        <i class="text-lg fa-regular fa-clock"></i>
       </div>
-    }
-  </div>
+      <span>
+        <em>{{ recipe().time }}s</em>
+        craft time
+      </span>
+    </div>
 
-  <hr />
+    <hr />
 
-  <div class="flex flex-col" data-cy="products">
-    <span class="text-xl">Produces</span>
-    @for (ingredient of recipeInfo().produces; track $index) {
-      <div class="flex flex-row items-center gap-2">
-        <app-factorio-icon [icon]="ENTITY_INFO[ingredient.id].icon"></app-factorio-icon>
-        <p>
-          <em> {{ ingredient.count }}</em>
-          <small> x </small>
-          <span>{{ ENTITY_INFO[ingredient.id].display }}</span>
+    <div class="flex flex-col" data-cy="producers">
+      <h4 class="text-sm font-semibold">Assigned Factories</h4>
+      @if (!existUnlockedMachines()) {
+        <p class="text-sm text-red-500">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          No Factories available yet, research needed.
         </p>
-      </div>
-    }
-  </div>
+      } @else {
+        <div class="flex flex-col">
+          @for (
+            factory of unlockedFactories();
+            track $index;
+            let index = $index;
+            let first = $first;
+            let last = $last
+          ) {
+            <div class="flex flex-row items-center justify-between">
+              <div class="flex flex-row items-center flex-1 gap-2">
+                <app-factorio-icon [icon]="ENTITY_INFO[factory.id].icon"></app-factorio-icon>
+                <em>{{ factory.count | appNumberFormatSuffix }} </em>
+              </div>
 
-  <hr />
-
-  <div class="flex flex-col" data-cy="producers">
-    <span class="text-xl">Made In</span>
-    <div class="flex flex-col">
-      @for (producer of producers(); track $index; let index = $index) {
-        <div class="flex flex-row items-center justify-between">
-          <div class="flex flex-row items-center gap-2">
-            <app-factorio-icon [icon]="ENTITY_INFO[producer.id].icon"></app-factorio-icon>
-            <em>{{ producer.isCrafting.length }}</em>
-          </div>
-
-          <div class="min-w-4 flex-1"></div>
-
-          <div class="flex flex-row">
-            <button
-              class="btn-icon text-green-500"
-              (click)="
-                gameService.addToRecipeProducers(
-                  inventoryEntity(),
-                  inventoryRecipe().id,
-                  producer.id,
-                  index
-                )
-              "
-              title="Add Producer from inventory"
-            >
-              <i class="fa-solid fa-plus fa-fw"></i>
-            </button>
-            <button
-              class="btn-icon text-red-500"
-              (click)="
-                gameService.removeFromRecipeProducers(
-                  inventoryEntity(),
-                  inventoryRecipe().id,
-                  producer.id,
-                  index
-                )
-              "
-              title="Remove Producer to inventory"
-            >
-              <i class="fa-solid fa-minus fa-fw"></i>
-            </button>
-          </div>
+              <div class="flex flex-row">
+                @if (!first) {
+                  <button
+                    class="text-blue-500 btn-icon"
+                    (click)="gameService.upgradeRecipeProducers(recipe().id, factory, index)"
+                    title="Upgrade All Available Factories"
+                  >
+                    <i class="fa-solid fa-angles-up fa-fw"></i>
+                  </button>
+                }
+                <!-- <button
+                class="text-green-500 btn-icon"
+                (click)="gameService.addMaxRecipeProducers(recipe().id, producer)"
+                title="Add Max Factories from Inventory"
+              >
+                <i class="fa-solid fa-arrows-up-to-line fa-fw"></i>
+                <i class="fa-solid fa-arrow-up fa-fw"></i>
+              </button> -->
+                <button
+                  class="text-green-500 btn-icon"
+                  (click)="gameService.addToRecipeProducers(recipe().id, factory)"
+                  title="Add Factory from Inventory"
+                >
+                  <i class="fa-solid fa-plus fa-fw"></i>
+                </button>
+                <!-- <button
+                class="text-red-500 btn-icon"
+                (click)="gameService.removeAllRecipeProducers(recipe().id, producer)"
+                title="Remove All Factory to Inventory"
+              >
+                <i class="fa-solid fa-arrows-down-to-line fa-fw"></i>
+                <i class="fa-solid fa-arrow-down fa-fw"></i>
+              </button> -->
+                <button
+                  class="text-red-500 btn-icon"
+                  (click)="gameService.removeFromRecipeProducers(recipe().id, factory)"
+                  title="Remove Factory to Inventory"
+                >
+                  <i class="fa-solid fa-minus fa-fw"></i>
+                </button>
+              </div>
+            </div>
+          }
         </div>
       }
     </div>
+
+    @for (section of cardInfo(); track $index) {
+      <hr />
+      <app-entity-count-list [entityCountList]="section"></app-entity-count-list>
+    }
   </div>
-
-  <!-- <pre>{{ recipeInfo().producedIn | json }}</pre> -->
-  <!-- <pre>{{ producers() | json }}</pre> -->
-
-  <!-- <hr class="py-2" />
-
-  <button
-    class="relative overflow-hidden btn-primary"
-    (click)="gameService.makeRecipe(recipeInfo())"
-  >
-    <span
-      class="absolute top-0 left-0 h-full bg-white opacity-20"
-      [ngStyle]="{ width: gameService.inventoryRecipe[recipeInfo().id].progress + '%' }"
-    ></span>
-    <span class="relative z-10">{{
-      gameService.inventoryRecipe[recipeInfo().id].progress
-        ? (gameService.inventoryRecipe[recipeInfo().id].progress / 100 | percent)
-        : 'Make Recipe'
-    }}</span>
-  </button> -->
 </div>
-
-<!-- <div
-  class="flex flex-col items-center justify-center m-auto border rounded shadow-md max-w-32 dark:text-white"
->
-  <app-factorio-icon [icon]="FactorioIcon.Ironore"></app-factorio-icon>
-  <app-factorio-icon [icon]="FactorioIcon.Electricminingdrill"></app-factorio-icon>
-  <app-factorio-icon [icon]="FactorioIcon.Ironaxe"></app-factorio-icon>
-</div>
-
-<div
-  class="flex flex-col items-center justify-center p-2 m-auto border rounded shadow-md dark:text-white"
->
-  <span class="text-neutral-100">Iron Plate</span>
-  <app-factorio-icon [icon]="FactorioIcon.Ironplate" [size]="IconSizes.lg"></app-factorio-icon>
-  <hr class="border-gray-300 dark:border-gray-500" />
-
-  <div class="flex flex-row gap-2">
-    <div class="flex p-2 shadow-inner bg-neutral-900 shadow-black">
-      <button class="w-16 h-16 hover:text-green-600" title="Craft">
-        <i class="text-6xl fa-solid fa-arrows-to-dot fa-fw"></i>
-      </button>
-    </div>
-
-    <app-factorio-icon
-      [icon]="FactorioIcon.Assemblingmachine2"
-      [size]="IconSizes.lg"
-    ></app-factorio-icon>
-  </div>
-</div> -->

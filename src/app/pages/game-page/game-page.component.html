@@ -1,0 +1,56 @@
+<ng-template #customTabTemplate let-icon>
+  <i class="fa-fw {{ icon }} drop-shadow-icon"></i>
+</ng-template>
+
+<div class="container flex flex-col flex-1 p-2 m-auto scroll-container">
+  <app-tabs
+    [(activeTab)]="activeTab"
+    [tabs]="tabs"
+    [class]="'text-xl'"
+    (activeTabChange)="onActiveTabChange($event)"
+  >
+  </app-tabs>
+
+  <div class="flex flex-row flex-1 scroll-container">
+    @if (activeTab === ControlTab.Inventory) {
+      <div
+        class="fixed bottom-0 left-0 z-10 flex max-h-[90dvh] w-full flex-col overflow-y-auto bg-neutral-900 md:relative md:max-h-none md:w-80 md:bg-black/20"
+        data-cy="panel-info"
+      >
+        @if (activeTab === ControlTab.Inventory && gameService.selectedEntity) {
+          <div class="p-2">
+            <app-item-info [entity]="gameService.selectedEntity"></app-item-info>
+          </div>
+        } @else {
+          <div class="flex-col items-center justify-center flex-1 hidden gap-6 p-2 md:flex">
+            <span>Select an item to view its information.</span>
+            <i class="text-6xl fa-solid fa-circle-info"></i>
+          </div>
+        }
+      </div>
+    }
+
+    <div
+      class="flex flex-wrap gap-4 p-2 scroll-container bg-black/10 sm:min-w-96"
+      data-cy="tab-content"
+    >
+      @switch (activeTab) {
+        @case (ControlTab.Inventory) {
+          <app-game-inventory></app-game-inventory>
+        }
+        @case (ControlTab.Tech) {
+          <app-game-tech></app-game-tech>
+        }
+        @case (ControlTab.Stats) {
+          <app-game-stats></app-game-stats>
+        }
+        @case (ControlTab.Dev) {
+          <pre>{{ gameService.gameState | json }}</pre>
+        }
+        @default {
+          <p>Coming Soon...</p>
+        }
+      }
+    </div>
+  </div>
+</div>

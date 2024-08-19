@@ -2,7 +2,7 @@
 import { isDevMode } from '@angular/core';
 import { Route } from '@angular/router';
 
-import { WorldComponent } from './components/world/world.component';
+import { GamePageComponent } from './pages/game-page/game-page.component';
 
 const DEV_ROUTE: Route[] = [];
 // https://angular.dev/api/core/isDevMode?tab=description
@@ -17,8 +17,8 @@ if (isDevMode()) {
 }
 
 export const appRoutes: Route[] = [
-  { path: '', component: WorldComponent },
+  { path: '', component: GamePageComponent },
   ...DEV_ROUTE,
-  { path: '**', component: WorldComponent },
+  { path: '**', component: GamePageComponent },
   //   { path: '**', component: ViewPages.NotFoundComponent },
 ];

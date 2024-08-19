@@ -1,52 +1,76 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, input, InputSignal, Signal } from '@angular/core';
-import {
-  Entity,
-  ENTITY_INFO,
-  ENTITY_TYPE_INFO,
-  FactorioWikiIcon,
-  GameService,
-  InventoryEntityMachinesInfo,
-  InventoryRecipe,
-  RECIPE_INFO,
-  RecipeInfo,
-} from 'src/app/shared';
+import { Component, computed, input } from '@angular/core';
+import { ENTITY_INFO, RecipeInfo } from 'src/app/shared';
+import { GameService } from 'src/app/shared/game-logic/game.service';
+import { ClampPercentPipe, NumberFormatSuffixPipe } from 'src/app/utils';
 
+import { IconCount } from '../entity-count/entity-count.component';
 import {
-  FactorioIconComponent,
-  IconSizes,
-} from '../factorio-icon/factorio-icon.component';
+  EntityCountListComponent,
+  IconCountList,
+} from '../entity-count-list/entity-count-list.component';
+import { FactorioIconComponent } from '../factorio-icon/factorio-icon.component';
 
 @Component({
   selector: 'app-recipe-card',
   templateUrl: './recipe-card.component.html',
   styles: [':host{display:contents}'],
   standalone: true,
-  imports: [CommonModule, FactorioIconComponent],
+  imports: [
+    CommonModule,
+    FactorioIconComponent,
+    ClampPercentPipe,
+    NumberFormatSuffixPipe,
+    EntityCountListComponent,
+  ],
 })
 export class RecipeCardComponent {
-  protected readonly FactorioIcon = FactorioWikiIcon;
-  protected readonly IconSizes = IconSizes;
+  protected ENTITY_INFO = ENTITY_INFO;
+  public recipe = input.required<RecipeInfo>();
+  public shownRecipeIdx = input<number>();
 
-  protected readonly ENTITY_TYPE_INFO = ENTITY_TYPE_INFO;
-  protected readonly ENTITY_INFO = ENTITY_INFO;
+  public existUnlockedMachines = computed((): boolean => {
+    return this.gameService.gameState.recipeProduction[
+      this.recipe().id
+    ].machines.some(
+      (factory) =>
+        this.gameService.gameState.entityInventory[factory.id].unlocked,
+    );
+  });
 
-  public inventoryEntity: InputSignal<Entity> = input.required<Entity>();
+  public unlockedFactories = computed(() => {
+    return this.gameService.gameState.recipeProduction[
+      this.recipe().id
+    ].machines.filter(
+      (factory) =>
+        this.gameService.gameState.entityInventory[factory.id].unlocked,
+    );
+  });
 
-  public inventoryRecipe: InputSignal<InventoryRecipe> =
-    input.required<InventoryRecipe>();
-
-  public recipeInfo: Signal<RecipeInfo> = computed(
-    (): RecipeInfo => RECIPE_INFO[this.inventoryRecipe().id],
-  );
-
-  public producers: Signal<InventoryEntityMachinesInfo[]> = computed(
-    (): InventoryEntityMachinesInfo[] => {
-      const q = this.inventoryRecipe().machines;
-      // console.log(this.inventoryRecipe());
-      return q;
-    },
-  );
+  protected cardInfo = computed((): IconCountList[] => {
+    return [
+      {
+        title: 'Produces',
+        entityCounts: this.recipe().produces.map(
+          (entity): IconCount => ({
+            icon: ENTITY_INFO[entity.id].icon,
+            display: ENTITY_INFO[entity.id].display,
+            count: entity.count,
+          }),
+        ),
+      },
+      {
+        title: 'Consumes',
+        entityCounts: this.recipe().consumes.map(
+          (entity): IconCount => ({
+            icon: ENTITY_INFO[entity.id].icon,
+            display: ENTITY_INFO[entity.id].display,
+            count: entity.count,
+          }),
+        ),
+      },
+    ];
+  });
 
   constructor(protected gameService: GameService) {}
 }

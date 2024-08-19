@@ -12,12 +12,12 @@
   },
   "scripts": {
     "i": "pnpm install",
+    "nx:clear-cache": "nx reset",
     "dep-graph": "nx dep-graph",
     "inferred-tasks": "nx show project game_web-factory --web ",
     "storybook": "nx run game_web-factory:storybook",
     "start": "nx run game_web-factory:serve --port=4200",
     "start:prod": "pnpm run build && http-server -g -p 5555 --cors -c-1 dist/browser -o",
-    "nx:clear-cache": "nx reset",
     "lint": "nx lint",
     "lint:fix": "nx lint --fix",
     "lint:err": "nx lint --quiet",

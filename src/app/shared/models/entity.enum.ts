@@ -7,9 +7,10 @@ export enum Entity {
   'DepositIron' = 'DepositIron',
   'DepositCopper' = 'DepositCopper',
   'DepositCoal' = 'DepositCoal',
-  // 'DepositWater' = 'DepositWater',
-  // 'DepositWood' = 'DepositWood',
-  // 'DepositUranium' = 'DepositUranium',
+  'DepositUranium' = 'DepositUranium',
+  'DepositWater' = 'DepositWater',
+  'DepositOil' = 'DepositOil',
+  'DepositWood' = 'DepositWood',
   // =========================================
   'RawStone' = 'RawStone',
   'RawIron' = 'RawIron',
@@ -39,16 +40,17 @@ export enum Entity {
   'Radar' = 'Radar',
   'Electricity' = 'Electricity',
   'SolarPanel' = 'SolarPanel',
+  'SteamEngine' = 'SteamEngine',
 }
 
 export interface CraftingInfo {
   /** Multiplier for craft time */
   craftSpeed: number;
   /** Determines to take fuel vs electricity */
-  energyType: 'chemical' | 'electric';
-  /** kW (kJ/s) */
+  energySources: Entity[];
+  /** W (J/s) */
   energyConsumption: number;
-  /** kW (kJ/s) */
+  /** W (J/s) */
   // drainConsumption?: number;
   // space: number;
   // modules: number;
@@ -56,7 +58,7 @@ export interface CraftingInfo {
 
 export const MANUAL_CRAFTING_INFO: CraftingInfo = {
   craftSpeed: 1,
-  energyType: 'chemical',
+  energySources: [Entity.RawCoal],
   energyConsumption: 0,
 };
 
@@ -95,12 +97,37 @@ export const ENTITY_INFO: Record<Entity, EntityInfo> = {
     type: EntityType.RawResource,
     icon: FactorioIcon.DepositStone,
   },
+  [Entity.DepositUranium]: {
+    id: Entity.DepositUranium,
+    display: 'Uranium Deposit',
+    type: EntityType.RawResource,
+    icon: FactorioIcon.DepositUranium,
+  },
+  [Entity.DepositWater]: {
+    id: Entity.DepositWater,
+    display: 'Water Deposit',
+    type: EntityType.RawResource,
+    icon: FactorioIcon.DepositWater,
+  },
+  [Entity.DepositOil]: {
+    id: Entity.DepositOil,
+    display: 'Oil Deposit',
+    type: EntityType.RawResource,
+    icon: FactorioIcon.DepositOil,
+  },
+  [Entity.DepositWood]: {
+    id: Entity.DepositWood,
+    display: 'Wood Deposit',
+    type: EntityType.RawResource,
+    icon: FactorioIcon.DepositWood,
+  },
   // =========================================
   [Entity.RawCoal]: {
     id: Entity.RawCoal,
     display: 'Raw Coal',
     type: EntityType.RawMaterial,
     icon: FactorioIcon.RawCoal,
+    energy: 4000000,
   },
   [Entity.RawCopper]: {
     id: Entity.RawCopper,
@@ -172,8 +199,8 @@ export const ENTITY_INFO: Record<Entity, EntityInfo> = {
     icon: FactorioWikiIcon.Stonefurnace,
     factoryData: {
       craftSpeed: 1,
-      energyType: 'chemical',
-      energyConsumption: 90,
+      energySources: [Entity.RawCoal],
+      energyConsumption: 90000,
     },
   },
   [Entity.FurnaceSteel]: {
@@ -183,8 +210,8 @@ export const ENTITY_INFO: Record<Entity, EntityInfo> = {
     icon: FactorioWikiIcon.Steelfurnace,
     factoryData: {
       craftSpeed: 2,
-      energyType: 'chemical',
-      energyConsumption: 90,
+      energySources: [Entity.RawCoal],
+      energyConsumption: 90000,
     },
   },
   [Entity.DrillBurner]: {
@@ -194,8 +221,8 @@ export const ENTITY_INFO: Record<Entity, EntityInfo> = {
     icon: FactorioWikiIcon.Burnerminingdrill,
     factoryData: {
       craftSpeed: 0.25,
-      energyType: 'chemical',
-      energyConsumption: 150,
+      energySources: [Entity.RawCoal],
+      energyConsumption: 150000,
     },
   },
   [Entity.DrillElectric]: {
@@ -205,8 +232,8 @@ export const ENTITY_INFO: Record<Entity, EntityInfo> = {
     icon: FactorioWikiIcon.Electricminingdrill,
     factoryData: {
       craftSpeed: 0.5,
-      energyType: 'electric',
-      energyConsumption: 90,
+      energySources: [Entity.Electricity],
+      energyConsumption: 90000,
     },
   },
   [Entity.Assembler1]: {
@@ -216,8 +243,8 @@ export const ENTITY_INFO: Record<Entity, EntityInfo> = {
     icon: FactorioWikiIcon.Assemblingmachine1,
     factoryData: {
       craftSpeed: 0.5,
-      energyType: 'electric',
-      energyConsumption: 75,
+      energySources: [Entity.Electricity],
+      energyConsumption: 75000,
       // drainConsumption: 2.5,
     },
   },
@@ -228,8 +255,8 @@ export const ENTITY_INFO: Record<Entity, EntityInfo> = {
     icon: FactorioWikiIcon.Assemblingmachine2,
     factoryData: {
       craftSpeed: 0.75,
-      energyType: 'electric',
-      energyConsumption: 150,
+      energySources: [Entity.Electricity],
+      energyConsumption: 150000,
       // drainConsumption: 5,
     },
   },
@@ -239,18 +266,52 @@ export const ENTITY_INFO: Record<Entity, EntityInfo> = {
     display: 'Radar',
     type: EntityType.ProductionMachine,
     icon: FactorioWikiIcon.Radar,
+    factoryData: {
+      craftSpeed: 1,
+      energyConsumption: 300000,
+      energySources: [],
+    },
   },
   [Entity.Electricity]: {
     id: Entity.Electricity,
     display: 'Electricity',
     type: EntityType.RawMaterial,
     icon: FactorioIcon.Electricity,
+    energy: 1,
   },
   [Entity.SolarPanel]: {
     id: Entity.SolarPanel,
     display: 'Solar Panel',
     type: EntityType.ProductionMachine,
     icon: FactorioWikiIcon.Solarpanel,
+    factoryData: {
+      craftSpeed: 1,
+      energyConsumption: 0,
+      energySources: [],
+    },
+  },
+  // [Entity.Steam]
+  // [Entity.Boiler]: {
+  //   id: Entity.Boiler,
+  //   display: 'Boiler',
+  //   type: EntityType.ProductionMachine,
+  //   icon: FactorioWikiIcon.Boiler,
+  //   factoryData: {
+  //     craftSpeed: 1,
+  //     energyConsumption: 0,
+  //     energySources: [],
+  //   },
+  // },
+  [Entity.SteamEngine]: {
+    id: Entity.SteamEngine,
+    display: 'Steam Engine',
+    type: EntityType.ProductionMachine,
+    icon: FactorioWikiIcon.Steamengine,
+    factoryData: {
+      craftSpeed: 1,
+      energyConsumption: 900000,
+      energySources: [Entity.RawCoal],
+    },
   },
 } as const;
 
@@ -290,3 +351,7 @@ export function groupEntitiesByType(
 export const ENTITY_INFO_OPTIONS: EntityInfo[] = ENTITY_OPTIONS.map(
   (o: Entity): EntityInfo => ENTITY_INFO[o],
 );
+
+export function isEntity(value: string): value is Entity {
+  return ENTITY_OPTIONS.includes(value as Entity);
+}

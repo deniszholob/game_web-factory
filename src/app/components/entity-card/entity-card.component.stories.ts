@@ -15,7 +15,11 @@ export default {
   },
   argTypes: {
     /** === Input Mapping === */
-    // input: { options: ['---', ...Object.values(YourEnum)], mapping: YourEnum & { '---': undefined }, control: { type: 'select' }}
+    entity: {
+      options: [...Object.values(Entity)],
+      // mapping: YourEnum & { '---': undefined },
+      control: { type: 'select' },
+    },
     /** === Output Actions === */
     // inputChange: { action: 'inputChange', table: { disable: true } }
     /** === Control Hide === */
@@ -24,7 +28,7 @@ export default {
     // someControl: { control: { disable: true } }
   },
   args: {
-    entity: Entity.RawIron,
+    entity: Entity.Assembler1,
   },
 } satisfies Meta<ComponentWithCustomControls>;
 

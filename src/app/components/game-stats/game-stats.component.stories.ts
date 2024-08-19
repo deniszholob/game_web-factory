@@ -1,15 +1,15 @@
 import { Meta, StoryObj } from '@storybook/angular';
 
-import { WorldComponent } from './world.component';
+import { GameStatsComponent } from './game-stats.component';
 
-type ComponentWithCustomControls = WorldComponent;
+type ComponentWithCustomControls = GameStatsComponent;
 
 export default {
-  title: 'Components/World',
-  component: WorldComponent,
+  title: 'Components/Game Stats',
+  component: GameStatsComponent,
   // decorators: [moduleMetadata({ imports: [] })],
   parameters: {
-    docs: { description: { component: `World` } },
+    docs: { description: { component: `GameStats` } },
     // layout: 'fullscreen',
   },
   argTypes: {
@@ -25,6 +25,6 @@ export default {
   args: {},
 } satisfies Meta<ComponentWithCustomControls>;
 
-export const World: StoryObj<ComponentWithCustomControls> = {
+export const GameStats: StoryObj<ComponentWithCustomControls> = {
   render: (args) => ({ props: args }),
 };

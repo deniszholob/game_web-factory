@@ -1,0 +1,12 @@
+<div class="flex flex-row items-center gap-2">
+  <app-factorio-icon [icon]="iconCount().icon"></app-factorio-icon>
+  @if (iconCount().count) {
+    <p>
+      <em> {{ iconCount().count | appNumberFormatSuffix }}</em>
+      <small> x </small>
+      <span class="text-gray-500">{{ iconCount().display }}</span>
+    </p>
+  } @else {
+    <span class="text-gray-500">{{ iconCount().display }}</span>
+  }
+</div>

@@ -1,8 +1,76 @@
 <div
-  class="m-auto flex max-w-32 flex-col items-center justify-center rounded border shadow-md dark:text-white"
+  class="flex flex-col rounded bg-neutral-200 dark:bg-neutral-800"
+  style="box-shadow: 0 0 5px 5px rgb(0 0 0 / 50%)"
 >
-  <span>{{ entityInfo().display }}</span>
-  <app-factorio-icon [icon]="entityInfo().icon"></app-factorio-icon>
-  <span>{{ entityInfo().type }}</span>
-  <span>{{ entityInfo().id }}</span>
+  <div class="flex flex-row">
+    <div
+      class="flex items-center justify-center flex-grow px-4 py-1 rounded-tl bg-neutral-500 text-neutral-800 dark:bg-neutral-600 dark:text-neutral-300"
+    >
+      {{ entityTypeInfo().display }}
+    </div>
+
+    <button class="rounded-tr btn-primary" (click)="onClose()" data-cy="close">
+      <i class="fa-solid fa-xmark fa-fw"></i>
+    </button>
+  </div>
+
+  <div class="flex flex-col gap-2 p-4 pt-1">
+    <div class="flex flex-row items-center gap-2">
+      <div class="drop-shadow-icon">
+        <app-factorio-icon [icon]="entityInfo().icon" [size]="IconSizes.lg"></app-factorio-icon>
+      </div>
+
+      <h3 class="flex-1 text-lg font-bold">{{ entityInfo().display }}</h3>
+
+      <span class="text-3xl text-right">
+        {{ gameService.gameState.entityInventory[entity()].count | appNumberFormatSuffix }}
+      </span>
+    </div>
+
+    <hr />
+
+    <div class="flex flex-col gap-2">
+      @if (entityInfo().energy) {
+        <app-entity-icon-stat
+          [entityIconStat]="{
+            icon: 'fa-solid fa-bolt',
+            count: entityInfo().energy ?? 0,
+            unit: 'J',
+            display: 'Energy'
+          }"
+        ></app-entity-icon-stat>
+      }
+
+      @if (entityInfo().factoryData) {
+        <app-entity-icon-stat
+          [entityIconStat]="{
+            icon: 'fa-solid fa-gauge',
+            count: entityInfo().factoryData?.craftSpeed ?? 0,
+            unit: 'x',
+            display: 'Speed'
+          }"
+        ></app-entity-icon-stat>
+
+        <app-entity-icon-stat
+          [entityIconStat]="{
+            icon: 'fa-solid fa-bolt',
+            count: entityInfo().factoryData?.energyConsumption ?? 0,
+            unit: 'J',
+            display: 'Energy Needed'
+          }"
+        ></app-entity-icon-stat>
+      }
+    </div>
+
+    @if (energySources().length > 0) {
+      <hr />
+      <app-entity-count-list
+        [entityCountList]="{
+          title: 'Energy Sources',
+          entityCounts: energySources()
+        }"
+      ></app-entity-count-list>
+    }
+    <!-- TODO: Add production rates? -->
+  </div>
 </div>
